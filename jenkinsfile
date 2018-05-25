@@ -1,12 +1,37 @@
-node {
-	stage 'Checkout'
-		checkout scm
+pipeline {
+agent any
 
-	stage 'Build'
-		bat 'nuget restore CompanyInfo.sln'
-		bat "\"${tool 'MSBuild'}\" CompanyInfo.sln /p:Configuration=Release /p:Platform=\"Any CPU\" /p:ProductVersion=1.0.0.${env.BUILD_NUMBER}"
+stages {
+stage('Build') {
+steps {
+bat echo 'Restore nugets..'
+bat 'nuget restore CompanyInfo.sln'
+bat echo 'Building..'
+bat "msbuild.exe" CompanyInfo.sln /noautorsp /ds /nologo /t:clean,rebuild /p:Configuration=Debug /v:m /p:VisualStudioVersion=14.0 /clp:Summary;ErrorsOnly;WarningsOnly /p:ProductVersion=1.0.0.${env.BUILD_NUMBER}
+}
+}
+stage('Test') {
+steps {
+bat echo 'Testing..'
+}
+}
+stage('Deploy') {
+steps {
+bat echo 'Deploying....'
+}
+}
+}
 
-	stage 'Archive'
-		archive 'ProjectName/bin/Release/**'
+post {
+success {
+bat echo 'Pipeline Succeeded'
+}
+failure {
+bat echo 'Pipeline Failed'
+}
+unstable {
+bat echo 'Pipeline run marked unstable'
+}
 
+}
 }
