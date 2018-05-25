@@ -5,7 +5,7 @@ stages {
 stage('Build') {
 steps {
 bat echo 'Restore nugets..'
-bat 'nuget restore CompanyInfo.sln'
+bat 'c:\\nuget\\nuget.exe restore CompanyInfo.sln'
 bat echo 'Building..'
 bat "msbuild.exe CompanyInfo.sln /noautorsp /ds /nologo /t:clean,rebuild /p:Configuration=Debug /v:m /p:VisualStudioVersion=14.0 /clp:Summary;ErrorsOnly;WarningsOnly"
 }
