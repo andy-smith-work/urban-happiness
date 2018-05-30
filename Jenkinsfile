@@ -6,31 +6,31 @@ pipeline {
             steps {
                 echo 'Restore nugets..'
                 bat 'c:\\nuget\\nuget.exe restore CompanyInfo.sln'
-                bat echo 'Building..'
+                echo 'Building..'
                 bat "msbuild.exe CompanyInfo.sln /noautorsp /ds /nologo /t:clean,rebuild /p:Configuration=Debug /v:m /p:VisualStudioVersion=14.0 /clp:Summary;ErrorsOnly;WarningsOnly"
             }
         }
         stage('Test') {
             steps {
-                bat echo 'Testing..'
+                echo 'Testing..'
             }
         }
         stage('Deploy') {
             steps {
-                bat echo 'Deploying....'
+                echo 'Deploying....'
             }
         }
     }
 
     post {
         success {
-            bat echo 'Pipeline Succeeded'
+            echo 'Pipeline Succeeded'
         }
         failure {
-            bat echo 'Pipeline Failed'
+            echo 'Pipeline Failed'
         }
         unstable {
-            bat echo 'Pipeline run marked unstable'
+            echo 'Pipeline run marked unstable'
         }
     }
 }
