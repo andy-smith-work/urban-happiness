@@ -17,6 +17,7 @@ pipeline {
       steps {
         echo 'Testing...'
         bat "\"${tool 'MSTest'}\" /testcontainer:CompanyInfo.Tests\\bin\\Debug\\CompanyInfo.Tests.dll"
+        mstest testResultsFile:"**/*.trx", keepLongStdio: true
       }
     }
     stage('Deploy') {
