@@ -7,7 +7,11 @@ pipeline {
                 echo 'Restore nugets..'
                 bat 'c:\\nuget\\nuget.exe restore CompanyInfo.sln'
                 echo 'Building..'
-                bat "\"${tool 'MSBuild'}\" CompanyInfo.sln /noautorsp /ds /nologo /t:clean,rebuild /p:Configuration=Debug /v:m /p:VisualStudioVersion=14.0 /clp:Summary;ErrorsOnly;WarningsOnly"
+                script {
+                    def msbuild = tool name: 'MSBuild', type: 'hudson.plugins.msbuild.MsBuildInstallation'
+                    bat "${msbuild} CompanyInfo.sln"
+                }
+//                bat "\"${tool 'MSBuild'}\" CompanyInfo.sln /noautorsp /ds /nologo /t:clean,rebuild /p:Configuration=Debug /v:m /p:VisualStudioVersion=14.0 /clp:Summary;ErrorsOnly;WarningsOnly"
             }
         }
         stage('Test') {
