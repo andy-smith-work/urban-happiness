@@ -4,9 +4,9 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Restore nugets..'
+                echo 'Restore nuget packages...'
                 bat 'c:\\nuget\\nuget.exe restore CompanyInfo.sln'
-                echo 'Building..'
+                echo 'Building...'
                 script {
                     def msbuild = tool name: 'MSBuild', type: 'hudson.plugins.msbuild.MsBuildInstallation'
                     bat "${msbuild} CompanyInfo.sln /p:VisualStudioVersion=14.0 /t:clean,rebuild /p:Configuration=Debug"
@@ -16,12 +16,13 @@ pipeline {
         }
         stage('Test') {
             steps {
-                echo 'Testing..'
+                echo 'Testing...'
+                bat "\"${tool 'MSTest'}\" /testcontainer:CompanyInfo.Tests.dll"
             }
         }
         stage('Deploy') {
             steps {
-                echo 'Deploying....'
+                echo 'Deploying...'
             }
         }
     }
